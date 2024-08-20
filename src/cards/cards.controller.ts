@@ -51,8 +51,8 @@ export class CardsController {
   @RestrictedByUserId()
   @HttpCode(HttpStatus.CREATED)
   @ApiOperation({ summary: 'Create a new card' })
-  @ApiParam(UserIdParams.asApiParamOptions)
   @ApiParam(ColumnIdParams.asApiParamOptions)
+  @ApiParam(UserIdParams.asApiParamOptions)
   @CardApiResponseCreated()
   @ApiResponseForbidden()
   async create(
