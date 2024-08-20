@@ -1,0 +1,5 @@
+export const PASSWORD_MIN_LENGTH = 6;
+export const COLUMN_NAME_MAX_LENGTH = 32;
+export const CARD_NAME_MAX_LENGTH = 32;
+export const CARD_DESCRIPTION_MAX_LENGTH = 256;
+export const COMMENT_CONTENT_MAX_LENGTH = 256;

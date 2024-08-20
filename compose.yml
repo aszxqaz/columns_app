@@ -1,0 +1,26 @@
+services:
+  db_dev:
+    image: postgres:12.19-bullseye
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=columns_app_dev
+    ports:
+      - 5432:5432
+    volumes:
+      - /var/lib/postgresql/data
+      - ./db/scripts:/docker-entrypoint-initdb.d/
+    restart: always
+
+  db_test:
+    image: postgres:12.19-bullseye
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=columns_app_test
+    ports:
+      - 5433:5432
+    volumes:
+      - /var/lib/postgresql/data
+      - ./db/scripts:/docker-entrypoint-initdb.d/
+    restart: always

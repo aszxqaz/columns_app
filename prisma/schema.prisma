@@ -1,0 +1,88 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Card {
+  id          Int       @id @default(autoincrement())
+  name        String
+  description String
+  columnId    Int       @map("column_id")
+  column      Column    @relation(fields: [columnId], references: [id], onDelete: Cascade)
+  comments    Comment[]
+
+  @@index([columnId], map: "idx_cards_column_id")
+  @@map("cards")
+}
+
+model Column {
+  id      Int    @id @default(autoincrement())
+  name    String
+  ownerId Int    @map("owner_id")
+  cards   Card[]
+  user    User   @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+
+  @@index([ownerId], map: "idx_columns_owner_id")
+  @@map("columns")
+}
+
+model Comment {
+  id       Int    @id @default(autoincrement())
+  content  String
+  authorId Int    @map("author_id")
+  cardId   Int    @map("card_id")
+  user     User   @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  card     Card   @relation(fields: [cardId], references: [id], onDelete: Cascade)
+
+  @@index([authorId], map: "idx_comments_author_id")
+  @@index([cardId], map: "idx_comments_card_id")
+  @@map("comments")
+}
+
+model InternalUser {
+  userId       Int      @id @map("user_id")
+  passwordHash String   @map("password_hash")
+  role         UserRole @default(user)
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("internal_users")
+}
+
+model Token {
+  hash   String     @id
+  scope  TokenScope
+  userId Int        @map("user_id")
+  user   User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, scope])
+  @@index([userId], map: "idx_tokens_user_id")
+  @@map("tokens")
+}
+
+model User {
+  id           Int           @id @default(autoincrement())
+  email        String        @unique
+  columns      Column[]
+  comments     Comment[]
+  internalUser InternalUser?
+  tokens       Token[]
+
+  @@map("users")
+}
+
+enum TokenScope {
+  auth
+
+  @@map("token_scope")
+}
+
+enum UserRole {
+  admin
+  user
+
+  @@map("user_role")
+}
