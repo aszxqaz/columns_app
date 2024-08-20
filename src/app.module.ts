@@ -17,6 +17,7 @@ import { UsersModule } from './users/users.module';
   imports: [
     ConfigModule.forRoot({
       envFilePath: `.env.${process.env.NODE_ENV?.toLowerCase()}`,
+      isGlobal: true,
     }),
     PrismaModule,
     UsersModule,

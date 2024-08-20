@@ -41,6 +41,7 @@ export class UserService {
       });
       return user;
     } catch (e) {
+      console.error(e);
       if (
         this.prismaService.mapError(e) ===
         PrismaError.UNIQUE_CONSTRAINT_VIOLATION
